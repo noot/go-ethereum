@@ -44,6 +44,7 @@ var PrecompiledContractsHomestead = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{2}): &sha256hash{},
 	common.BytesToAddress([]byte{3}): &ripemd160hash{},
 	common.BytesToAddress([]byte{4}): &dataCopy{},
+	common.BytesToAddress([]byte{9}): &ringVerify{},
 }
 
 // PrecompiledContractsByzantium contains the default set of pre-compiled Ethereum
@@ -57,6 +58,7 @@ var PrecompiledContractsByzantium = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{6}): &bn256Add{},
 	common.BytesToAddress([]byte{7}): &bn256ScalarMul{},
 	common.BytesToAddress([]byte{8}): &bn256Pairing{},
+	common.BytesToAddress([]byte{9}): &ringVerify{},
 }
 
 // RunPrecompiledContract runs and evaluates the output of a precompiled contract.
@@ -66,6 +68,16 @@ func RunPrecompiledContract(p PrecompiledContract, input []byte, contract *Contr
 		return p.Run(input)
 	}
 	return nil, ErrOutOfGas
+}
+
+type ringVerify struct{}
+
+func (c *ringVerify) RequiredGas(input []byte) uint64  {
+	return params.RingVerifyGas
+}
+
+func (c *ringVerify) Run(input []byte) ([]byte, error) {
+	return []byte{}, nil
 }
 
 // ECRECOVER implemented as a native contract.
