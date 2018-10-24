@@ -25,7 +25,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/bn256"
-	//"github.com/ethereum/go-ethereum/crypto/ring"
+	"github.com/ethereum/go-ethereum/crypto/ring"
 	"github.com/ethereum/go-ethereum/params"
 	"golang.org/x/crypto/ripemd160"
 )
@@ -79,20 +79,14 @@ func (c *ringVerify) RequiredGas(input []byte) uint64  {
 }
 
 func (c *ringVerify) Run(input []byte) ([]byte, error) {
-	// format input: 
-	// n := input[0:31] // size
-	// msg := imput[32:63]
-	// c[0] := input[64:127]
-	// s[0...n-1] := input[128:127+(32*n)]
-	// P[0...n-1] := input[128+(32*n):127+(32*3*n)]
-	// P[0].X = P[0:31] 
-	// P[0].Y = P[32:63]
-	// P[1].X = P[64:127]
-	// ...
-	// P[n-1].Y = P[128+(32*(n-1)):127+(32*n)]
+	sig := ring.MarshalSignature(input)
+	ver := ring.Verify(sig)
 
-
-	return []byte{}, nil
+	if ver {
+		return []byte{1}, nil
+	} else {
+		return []byte{0}, nil
+	}
 }
 
 // ECRECOVER implemented as a native contract.
