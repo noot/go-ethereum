@@ -85,7 +85,7 @@ const (
 	Bn256ScalarMulGas       uint64 = 40000  // Gas needed for an elliptic curve scalar multiplication
 	Bn256PairingBaseGas     uint64 = 100000 // Base price for an elliptic curve pairing check
 	Bn256PairingPerPointGas uint64 = 80000  // Per-point price for an elliptic curve pairing check
-	RingVerifyGas			uint64 = 77	// Ring signature verification gas price
+	RingVerifyGas			uint64 = 1000	// Ring signature verification gas price
 )
 
 var (
