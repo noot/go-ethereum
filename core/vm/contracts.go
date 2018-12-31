@@ -17,11 +17,9 @@
 package vm
 
 import (
-	"fmt"
 	"crypto/sha256"
 	"errors"
 	"math/big"
-	"encoding/hex"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/math"
@@ -82,7 +80,7 @@ func (c *ringVerify) RequiredGas(input []byte) uint64  {
 
 
 func (c *ringVerify) Run(input []byte) ([]byte, error) {
-	sig, err := ring.MarshalSignature(input[32:])
+	sig, err := ring.DeserializeSignature(input[32:])
 	if err != nil {
 		return []byte{0}, nil
 	}
